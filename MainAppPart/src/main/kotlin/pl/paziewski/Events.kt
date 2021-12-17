@@ -11,8 +11,7 @@ abstract class AbstractEvent(
 class CardBoughtEvent(
     val phoneNumber: String,
     val initialMoney: BigDecimal,
-    val firstName: String,
-    val lastName: String,
+    val owner: CardOwner,
     timestamp: LocalDateTime
 ) : AbstractEvent(timestamp)
 

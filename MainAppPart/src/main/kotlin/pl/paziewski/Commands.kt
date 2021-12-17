@@ -3,7 +3,7 @@ package pl.paziewski
 import java.math.BigDecimal
 import java.time.Duration
 
-class BuyCardCommand(val initialMoney: BigDecimal, val firstName: String, val lastName: String)
+class BuyCardCommand(val initialMoney: BigDecimal, val owner: CardOwner)
 
 class MakePhoneCallCommand(val callerPhoneNumber: String, val receiverPhoneNumber: String, val callDuration: Duration)
 
