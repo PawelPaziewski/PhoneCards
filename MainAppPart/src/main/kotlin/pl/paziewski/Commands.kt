@@ -1,12 +1,23 @@
 package pl.paziewski
 
+import org.axonframework.commandhandling.TargetAggregateIdentifier
 import java.math.BigDecimal
 import java.time.Duration
 
 class BuyCardCommand(val initialMoney: BigDecimal, val owner: CardOwner)
 
-class MakePhoneCallCommand(val callerPhoneNumber: String, val receiverPhoneNumber: String, val callDuration: Duration)
+class MakePhoneCallCommand(
+    @TargetAggregateIdentifier val callerPhoneNumber: String,
+    val receiverPhoneNumber: String,
+    val callDuration: Duration
+)
 
-class TopUpCardCommand(val phoneNumber: String, val amount: BigDecimal)
+class TopUpCardCommand(
+    @TargetAggregateIdentifier val phoneNumber: String,
+    val amount: BigDecimal
+)
 
-class SendSmsCommand(val senderPhoneNumber: String, val receiverPhoneNumber: String)
+class SendSmsCommand(
+    @TargetAggregateIdentifier val senderPhoneNumber: String,
+    val receiverPhoneNumber: String
+)
