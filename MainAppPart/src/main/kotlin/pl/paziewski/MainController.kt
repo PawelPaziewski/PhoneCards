@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.math.BigDecimal
 import java.time.Duration
 
-@RestController()
+@RestController
 class MainController {
 
     @GetMapping("/cardBalance")
