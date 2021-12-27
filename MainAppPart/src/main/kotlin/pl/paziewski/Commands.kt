@@ -1,6 +1,6 @@
 package pl.paziewski
 
-import org.axonframework.commandhandling.TargetAggregateIdentifier
+import org.axonframework.modelling.command.TargetAggregateIdentifier
 import java.math.BigDecimal
 import java.time.Duration
 

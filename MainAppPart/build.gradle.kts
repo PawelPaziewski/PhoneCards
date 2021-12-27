@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("org.springframework.boot") version "2.6.1"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -16,24 +14,12 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.axonframework:axon-core:3.4.3")
-    implementation("org.axonframework:axon-spring:4.5.5")
+    implementation("org.axonframework:axon-spring-boot-starter:4.5.5")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.6.2")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.assertj:assertj-core:3.21.0")
-    testImplementation("org.axonframework:axon-test:3.4.3")
+    testImplementation("org.axonframework:axon-test:4.5.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
-    }
 }
 
 tasks.withType<Test> {

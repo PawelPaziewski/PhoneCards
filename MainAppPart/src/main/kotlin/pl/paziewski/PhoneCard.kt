@@ -1,12 +1,12 @@
 package pl.paziewski
 
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.eventsourcing.EventSourcingHandler
+import org.axonframework.modelling.command.AggregateIdentifier
+import org.axonframework.modelling.command.AggregateLifecycle.apply
 import org.axonframework.spring.stereotype.Aggregate
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import org.axonframework.commandhandling.model.AggregateLifecycle.apply as applyEvent
 
 @Aggregate
 class PhoneCard() {
@@ -21,7 +21,7 @@ class PhoneCard() {
         if (!validator.isValidCommand(command)) {
             throw IllegalArgumentException("Initial money cannot be less then zero")
         }
-        applyEvent(
+        apply(
             CardBoughtEvent(
                 numberProvider.getNumber(),
                 command.initialMoney,
@@ -43,7 +43,7 @@ class PhoneCard() {
         if (!validator.isValidCommandAndState(command, this)) {
             throw IllegalStateException("Could not make call because of no money on account")
         }
-        applyEvent(
+        apply(
             PhoneCallMadeEvent(
                 phoneNumber,
                 command.receiverPhoneNumber,
@@ -64,7 +64,7 @@ class PhoneCard() {
         if (!validator.isValidCommandAndState(command, this)) {
             throw IllegalStateException("Could not make call because of no money on account")
         }
-        applyEvent(
+        apply(
             SmsSentEvent(
                 phoneNumber,
                 command.receiverPhoneNumber,
@@ -84,7 +84,7 @@ class PhoneCard() {
         if (!validator.isValidCommand(command)) {
             throw IllegalArgumentException("Cannot top up account with amount less or equal then zero")
         }
-        applyEvent(CardTopUpEvent(phoneNumber, command.amount, LocalDateTime.now()))
+        apply(CardTopUpEvent(phoneNumber, command.amount, LocalDateTime.now()))
     }
 
     @EventSourcingHandler
