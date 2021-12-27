@@ -1,10 +1,14 @@
 package pl.paziewski
 
+import org.axonframework.commandhandling.gateway.CommandGateway
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
@@ -18,9 +22,12 @@ import java.time.Duration
 internal class MainControllerTest(
     @Autowired private val webAppContext: WebApplicationContext
 ) {
-    private val correctPhoneNumber = "123 456 789"
+    private val correctPhoneNumber = "123 456 782"
 
     private lateinit var mockMvc: MockMvc
+
+    @MockBean
+    private lateinit var commandGateway: CommandGateway
 
     @BeforeEach
     internal fun setUp() {
@@ -33,6 +40,8 @@ internal class MainControllerTest(
 
         @Test
         internal fun `should has status OK while put to buy phone card with initial money amount and buyer first and last name provided`() {
+            whenever(commandGateway.sendAndWait<String>(any())).thenReturn("123 456 789")
+
             mockMvc.perform(
                 put(buyPhoneCardAddress)
                     .param("initialMoney", BigDecimal.TEN.toString())
