@@ -1,19 +1,29 @@
 package pl.paziewski
 
 import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.messaging.responsetypes.ResponseTypes
+import org.axonframework.queryhandling.QueryGateway
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import pl.paziewski.db.GetAccountBalanceQuery
 import java.math.BigDecimal
 import java.time.Duration
+import java.util.*
 
 @RestController
-class MainController @Autowired constructor(private val commandGateway: CommandGateway) {
+class MainController @Autowired constructor(
+    private val commandGateway: CommandGateway,
+    private val queryGateway: QueryGateway
+) {
 
     @GetMapping("/cardBalance")
-    fun getCardBalance(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String) {
+    fun getCardBalance(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String): Optional<BigDecimal> {
+        return queryGateway
+            .query(GetAccountBalanceQuery(phoneNumber), ResponseTypes.optionalInstanceOf(BigDecimal::class.java))
+            .get()
     }
 
     @PutMapping("/buyPhoneCard")

@@ -1,6 +1,8 @@
 package pl.paziewski
 
 import org.axonframework.commandhandling.gateway.CommandGateway
+import org.axonframework.messaging.responsetypes.ResponseTypes
+import org.axonframework.queryhandling.QueryGateway
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -15,8 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
+import pl.paziewski.db.GetAccountBalanceQuery
 import java.math.BigDecimal
 import java.time.Duration
+import java.util.*
+import java.util.concurrent.CompletableFuture
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class MainControllerTest(
@@ -28,6 +33,9 @@ internal class MainControllerTest(
 
     @MockBean
     private lateinit var commandGateway: CommandGateway
+
+    @MockBean
+    private lateinit var queryGateway: QueryGateway
 
     @BeforeEach
     internal fun setUp() {
@@ -223,6 +231,13 @@ internal class MainControllerTest(
 
         @Test
         internal fun `'should has status OK while get to card balance with phone number provided'`() {
+            whenever(
+                queryGateway.query(
+                    GetAccountBalanceQuery(correctPhoneNumber),
+                    ResponseTypes.optionalInstanceOf(BigDecimal::class.java)
+                )
+            ).thenReturn(CompletableFuture.completedFuture(Optional.of(BigDecimal.ZERO)))
+
             mockMvc.perform(get(cardBalanceAddress).param("phoneNumber", correctPhoneNumber))
                 .andExpect(status().isOk)
         }
