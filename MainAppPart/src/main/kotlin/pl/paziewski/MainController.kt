@@ -1,5 +1,7 @@
 package pl.paziewski
 
+import org.axonframework.commandhandling.gateway.CommandGateway
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -8,7 +10,7 @@ import java.math.BigDecimal
 import java.time.Duration
 
 @RestController
-class MainController {
+class MainController @Autowired constructor(private val commandGateway: CommandGateway) {
 
     @GetMapping("/cardBalance")
     fun getCardBalance(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String) {
@@ -19,7 +21,8 @@ class MainController {
         @RequestParam(required = true, name = "initialMoney") initialMoneyAmount: BigDecimal,
         @RequestParam(required = true, name = "buyerFirstName") firstName: String,
         @RequestParam(required = true, name = "buyerLastName") lastName: String
-    ) {
+    ): String {
+        return commandGateway.sendAndWait(BuyCardCommand(initialMoneyAmount, CardOwner(firstName, lastName)))
     }
 
     @PutMapping("/makePhoneCall")
@@ -28,6 +31,7 @@ class MainController {
         @RequestParam(required = true, name = "receiverPhoneNumber") receiver: String,
         @RequestParam(required = true, name = "callDuration") callDuration: Duration
     ) {
+        commandGateway.send<Any>(MakePhoneCallCommand(caller, receiver, callDuration))
     }
 
     @PutMapping("/topUpCard")
@@ -35,6 +39,7 @@ class MainController {
         @RequestParam(required = true, name = "phoneNumber") phoneNumber: String,
         @RequestParam(required = true, name = "amount") amount: BigDecimal
     ) {
+        commandGateway.send<Any>(TopUpCardCommand(phoneNumber, amount))
     }
 
     @PutMapping("/sendSms")
@@ -42,5 +47,6 @@ class MainController {
         @RequestParam(required = true, name = "senderPhoneNumber") sender: String,
         @RequestParam(required = true, name = "receiverPhoneNumber") receiver: String
     ) {
+        commandGateway.send<Any>(SendSmsCommand(sender, receiver))
     }
 }
