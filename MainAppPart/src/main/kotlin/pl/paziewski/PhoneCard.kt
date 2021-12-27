@@ -6,7 +6,6 @@ import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle.apply
 import org.axonframework.spring.stereotype.Aggregate
 import java.math.BigDecimal
-import java.time.LocalDateTime
 
 @Aggregate
 class PhoneCard() {
@@ -26,7 +25,7 @@ class PhoneCard() {
                 numberProvider.getNumber(),
                 command.initialMoney,
                 command.owner,
-                LocalDateTime.now()
+                DateTimeAdapter.now()
             )
         )
     }
@@ -49,7 +48,7 @@ class PhoneCard() {
                 command.receiverPhoneNumber,
                 command.callDuration,
                 costCalculator.calculate(command.callDuration),
-                LocalDateTime.now()
+                DateTimeAdapter.now()
             )
         )
     }
@@ -69,7 +68,7 @@ class PhoneCard() {
                 phoneNumber,
                 command.receiverPhoneNumber,
                 costCalculator.calculate(),
-                LocalDateTime.now()
+                DateTimeAdapter.now()
             )
         )
     }
@@ -84,7 +83,7 @@ class PhoneCard() {
         if (!validator.isValidCommand(command)) {
             throw IllegalArgumentException("Cannot top up account with amount less or equal then zero")
         }
-        apply(CardTopUpEvent(phoneNumber, command.amount, LocalDateTime.now()))
+        apply(CardTopUpEvent(phoneNumber, command.amount, DateTimeAdapter.now()))
     }
 
     @EventSourcingHandler
