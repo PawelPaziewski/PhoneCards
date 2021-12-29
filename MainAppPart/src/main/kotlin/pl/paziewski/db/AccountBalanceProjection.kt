@@ -49,4 +49,7 @@ class AccountBalanceProjection @Autowired constructor(private val repository: Ac
     @QueryHandler
     fun getAccountBalance(query: GetAccountBalanceQuery): Optional<BigDecimal> = repository.findById(query.phoneNumber)
         .map { it.balance }
+
+    @QueryHandler
+    fun getAllNumbers(query: GetAllPhoneNumbersQuery): List<String> = repository.findAll().map { it.phoneNumber }
 }

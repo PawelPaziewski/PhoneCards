@@ -171,6 +171,34 @@ internal class AccountBalanceProjectionTest {
         }
     }
 
+    @Nested
+    inner class GetAllPhoneNumbersQueryTest {
+        private val anySecondPhoneNumber = "123 456 780"
+
+        @Test
+        internal fun `should return empty list while db is empty`() {
+            val allNumbers = projection.getAllNumbers(GetAllPhoneNumbersQuery())
+
+            Assertions.assertThat(allNumbers).isEmpty()
+        }
+
+        @Test
+        internal fun `should return list containing elements saved to db`() {
+            repository.saveAll(
+                listOf(
+                    AccountBalance(anyPhoneNumber, anyBigDecimal), AccountBalance(anySecondPhoneNumber, anyBigDecimal)
+                )
+            )
+
+            val allNumbers = projection.getAllNumbers(GetAllPhoneNumbersQuery())
+
+            Assertions.assertThat(allNumbers).isNotEmpty
+                .hasSize(2)
+                .containsAll(listOf(anyPhoneNumber, anySecondPhoneNumber))
+        }
+    }
+
+
     private fun prepareDb(phoneNumberPresent: String, phoneNumberNotPresent: String, initialMoney: BigDecimal) {
         projection.on(
             CardBoughtEvent(
