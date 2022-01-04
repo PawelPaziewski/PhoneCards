@@ -1,14 +1,13 @@
 package pl.paziewski
 
 import org.springframework.stereotype.Component
-import java.math.BigDecimal
 import java.time.Duration
 
 interface CallCostCalculator {
-    fun calculate(callDuration: Duration): BigDecimal
+    fun calculate(callDuration: Duration): Money
 }
 
 @Component
 class SimpleCallCostCalculator : CallCostCalculator {
-    override fun calculate(callDuration: Duration): BigDecimal = BigDecimal.valueOf(callDuration.toMinutes())
+    override fun calculate(callDuration: Duration): Money = callDuration.toMinutes().asMoneyWithLocalCurrency()
 }

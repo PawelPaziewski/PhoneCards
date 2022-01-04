@@ -4,11 +4,7 @@ import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import pl.paziewski.CardBoughtEvent
-import pl.paziewski.CardTopUpEvent
-import pl.paziewski.PhoneCallMadeEvent
-import pl.paziewski.SmsSentEvent
-import java.math.BigDecimal
+import pl.paziewski.*
 import java.util.*
 
 @Service
@@ -47,7 +43,7 @@ class AccountBalanceProjection @Autowired constructor(private val repository: Ac
     }
 
     @QueryHandler
-    fun getAccountBalance(query: GetAccountBalanceQuery): Optional<BigDecimal> = repository.findById(query.phoneNumber)
+    fun getAccountBalance(query: GetAccountBalanceQuery): Optional<Money> = repository.findById(query.phoneNumber)
         .map { it.balance }
 
     @QueryHandler

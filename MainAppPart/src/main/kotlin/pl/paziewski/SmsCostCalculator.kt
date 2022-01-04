@@ -4,10 +4,10 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 interface SmsCostCalculator {
-    fun calculate(): BigDecimal
+    fun calculate(): Money
 }
 
 @Component
 class SimpleSmsCostCalculator : SmsCostCalculator {
-    override fun calculate(): BigDecimal = BigDecimal.ONE
+    override fun calculate(): Money = BigDecimal.ONE.asMoneyWithLocalCurrency()
 }

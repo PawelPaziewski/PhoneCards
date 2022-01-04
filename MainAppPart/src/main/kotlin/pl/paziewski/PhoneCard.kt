@@ -5,14 +5,13 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle.apply
 import org.axonframework.spring.stereotype.Aggregate
-import java.math.BigDecimal
 
 @Aggregate
 class PhoneCard() {
 
     @AggregateIdentifier
     lateinit var phoneNumber: String
-    lateinit var moneyOnAccount: BigDecimal
+    lateinit var moneyOnAccount: Money
     lateinit var owner: CardOwner
 
     @CommandHandler
@@ -23,7 +22,7 @@ class PhoneCard() {
         apply(
             CardBoughtEvent(
                 numberProvider.getNumber(),
-                command.initialMoney,
+                command.initialMoney.asMoneyWithLocalCurrency(),
                 command.owner,
                 DateTimeAdapter.now()
             )
@@ -83,11 +82,11 @@ class PhoneCard() {
         if (!validator.isValidCommand(command)) {
             throw IllegalArgumentException("Cannot top up account with amount less or equal then zero")
         }
-        apply(CardTopUpEvent(phoneNumber, command.amount, DateTimeAdapter.now()))
+        apply(CardTopUpEvent(phoneNumber, command.amount.asMoneyWithLocalCurrency(), DateTimeAdapter.now()))
     }
 
     @EventSourcingHandler
     fun on(event: CardTopUpEvent) {
-        moneyOnAccount += event.amount
+        moneyOnAccount = moneyOnAccount.plus(event.amount)
     }
 }

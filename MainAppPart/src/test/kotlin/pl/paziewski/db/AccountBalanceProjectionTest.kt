@@ -23,12 +23,12 @@ internal class AccountBalanceProjectionTest {
         projection = AccountBalanceProjection(repository)
     }
 
-    private val anyBigDecimal = BigDecimal.TEN
+    private val anyMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
     @Test
     internal fun `should save account balance to db on CardBoughtEvent`() {
         val phoneNumber = "123 456 789"
-        val initialMoney = BigDecimal.TEN
+        val initialMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
         projection.on(
             CardBoughtEvent(
@@ -44,7 +44,7 @@ internal class AccountBalanceProjectionTest {
     inner class CardTopUpEventTest {
         private val phoneNumberInDb = "123 456 789"
         private val phoneNumberNotPresentInDb = "987 654 321"
-        private val initialMoney = BigDecimal.TEN
+        private val initialMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
         @BeforeEach
         internal fun setUp() {
@@ -53,7 +53,7 @@ internal class AccountBalanceProjectionTest {
 
         @Test
         internal fun `should increase money on account while TopUpEvent and AccountBalance found in db`() {
-            val topUpAmount = BigDecimal.TEN
+            val topUpAmount = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
             projection.on(CardTopUpEvent(phoneNumberInDb, topUpAmount, anyTimestamp))
 
@@ -63,7 +63,7 @@ internal class AccountBalanceProjectionTest {
 
         @Test
         internal fun `should do nothing while TopUpEvent and AccountBalance not found in db`() {
-            projection.on(CardTopUpEvent(phoneNumberNotPresentInDb, anyBigDecimal, anyTimestamp))
+            projection.on(CardTopUpEvent(phoneNumberNotPresentInDb, anyMoney, anyTimestamp))
 
             Assertions.assertThat(repository.findById(phoneNumberNotPresentInDb)).isEmpty
         }
@@ -73,7 +73,7 @@ internal class AccountBalanceProjectionTest {
     inner class PhoneCallMadeEventTest {
         private val phoneNumberInDb = "123 456 789"
         private val phoneNumberNotPresentInDb = "987 654 321"
-        private val initialMoney = BigDecimal.TEN
+        private val initialMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
         private val anyDuration = Duration.ZERO
 
@@ -84,7 +84,7 @@ internal class AccountBalanceProjectionTest {
 
         @Test
         internal fun `should decrease money on account while PhoneCallMadeEvent and AccountBalance found in db`() {
-            val callCost = BigDecimal.ONE
+            val callCost = BigDecimal.ONE.asMoneyWithLocalCurrency()
 
             projection.on(
                 PhoneCallMadeEvent(
@@ -101,7 +101,7 @@ internal class AccountBalanceProjectionTest {
 
             projection.on(
                 PhoneCallMadeEvent(
-                    phoneNumberNotPresentInDb, anyPhoneNumber, anyDuration, anyBigDecimal, anyTimestamp
+                    phoneNumberNotPresentInDb, anyPhoneNumber, anyDuration, anyMoney, anyTimestamp
                 )
             )
 
@@ -113,7 +113,7 @@ internal class AccountBalanceProjectionTest {
     inner class SmsSentEventTest {
         private val phoneNumberInDb = "123 456 789"
         private val phoneNumberNotPresentInDb = "987 654 321"
-        private val initialMoney = BigDecimal.TEN
+        private val initialMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
         @BeforeEach
         internal fun setUp() {
@@ -122,7 +122,7 @@ internal class AccountBalanceProjectionTest {
 
         @Test
         internal fun `should decrease money on account while SmsSentEvent and AccountBalance found in db`() {
-            val smsCost = BigDecimal.ONE
+            val smsCost = BigDecimal.ONE.asMoneyWithLocalCurrency()
             projection.on(
                 SmsSentEvent(
                     phoneNumberInDb, anyPhoneNumber, smsCost, anyTimestamp
@@ -137,7 +137,7 @@ internal class AccountBalanceProjectionTest {
         internal fun `should do nothing while SmsSentEvent and AccountBalance not found in db`() {
             projection.on(
                 SmsSentEvent(
-                    phoneNumberNotPresentInDb, anyPhoneNumber, anyBigDecimal, anyTimestamp
+                    phoneNumberNotPresentInDb, anyPhoneNumber, anyMoney, anyTimestamp
                 )
             )
 
@@ -149,7 +149,7 @@ internal class AccountBalanceProjectionTest {
     inner class GetAccountBalanceQueryTest {
         private val phoneNumberInDb = "123 456 789"
         private val phoneNumberNotPresentInDb = "987 654 321"
-        private val initialMoney = BigDecimal.TEN
+        private val initialMoney = BigDecimal.TEN.asMoneyWithLocalCurrency()
 
         @BeforeEach
         internal fun setUp() {
@@ -186,7 +186,7 @@ internal class AccountBalanceProjectionTest {
         internal fun `should return list containing elements saved to db`() {
             repository.saveAll(
                 listOf(
-                    AccountBalance(anyPhoneNumber, anyBigDecimal), AccountBalance(anySecondPhoneNumber, anyBigDecimal)
+                    AccountBalance(anyPhoneNumber, anyMoney), AccountBalance(anySecondPhoneNumber, anyMoney)
                 )
             )
 
@@ -199,7 +199,7 @@ internal class AccountBalanceProjectionTest {
     }
 
 
-    private fun prepareDb(phoneNumberPresent: String, phoneNumberNotPresent: String, initialMoney: BigDecimal) {
+    private fun prepareDb(phoneNumberPresent: String, phoneNumberNotPresent: String, initialMoney: Money) {
         projection.on(
             CardBoughtEvent(
                 phoneNumberPresent, initialMoney, anyCardOwner, anyTimestamp

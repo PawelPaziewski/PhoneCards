@@ -1,6 +1,5 @@
 package pl.paziewski
 
-import java.math.BigDecimal
 import java.time.Duration
 
 abstract class AbstractEvent(
@@ -9,28 +8,28 @@ abstract class AbstractEvent(
 
 class CardBoughtEvent(
     val phoneNumber: String,
-    val initialMoney: BigDecimal,
+    val initialMoney: Money,
     val owner: CardOwner,
-    timestamp: DateTimeAdapter
+    timestamp: DateTimeAdapter,
 ) : AbstractEvent(timestamp)
 
 class PhoneCallMadeEvent(
     val callerPhoneNumber: String,
     val receiverPhoneNumber: String,
     val callDuration: Duration,
-    val callCost: BigDecimal,
-    timestamp: DateTimeAdapter
+    val callCost: Money,
+    timestamp: DateTimeAdapter,
 ) : AbstractEvent(timestamp)
 
 class CardTopUpEvent(
     val phoneNumber: String,
-    val amount: BigDecimal,
-    timestamp: DateTimeAdapter
+    val amount: Money,
+    timestamp: DateTimeAdapter,
 ) : AbstractEvent(timestamp)
 
 class SmsSentEvent(
     val senderPhoneNumber: String,
     val receiverPhoneNumber: String,
-    val cost: BigDecimal,
-    timestamp: DateTimeAdapter
+    val cost: Money,
+    timestamp: DateTimeAdapter,
 ) : AbstractEvent(timestamp)

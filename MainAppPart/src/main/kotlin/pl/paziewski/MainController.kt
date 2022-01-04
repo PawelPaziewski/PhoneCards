@@ -20,9 +20,9 @@ class MainController @Autowired constructor(
 ) {
 
     @GetMapping("/cardBalance")
-    fun getCardBalance(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String): Optional<BigDecimal> {
+    fun getCardBalance(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String): Optional<Money> {
         return queryGateway
-            .query(GetAccountBalanceQuery(phoneNumber), ResponseTypes.optionalInstanceOf(BigDecimal::class.java))
+            .query(GetAccountBalanceQuery(phoneNumber), ResponseTypes.optionalInstanceOf(Money::class.java))
             .get()
     }
 

@@ -50,7 +50,8 @@ internal class PhoneCardTest {
                 .expectEventMatchingType(CardBoughtEvent::class)
                 .expectState {
                     Assertions.assertThat(it.owner).isEqualTo(command.owner)
-                    Assertions.assertThat(it.moneyOnAccount).isEqualTo(command.initialMoney)
+                    Assertions.assertThat(it.moneyOnAccount)
+                        .isEqualTo(command.initialMoney.asMoneyWithLocalCurrency())
                 }
         }
 
@@ -78,7 +79,8 @@ internal class PhoneCardTest {
         @Test
         internal fun `should produce event while valid phone call made`() {
             whenever(validator.isValidCommandAndState(eq(command), any())).thenReturn(true)
-            whenever(callCostCalculator.calculate(command.callDuration)).thenReturn(BigDecimal.TEN)
+            whenever(callCostCalculator.calculate(command.callDuration))
+                .thenReturn(BigDecimal.TEN.asMoneyWithLocalCurrency())
 
             fixture
                 .givenCommands(previousCommand)
@@ -86,7 +88,7 @@ internal class PhoneCardTest {
                 .expectEventMatchingType(PhoneCallMadeEvent::class)
                 .expectState {
                     Assertions.assertThat(it.moneyOnAccount)
-                        .isEqualTo(previousCommand.initialMoney - BigDecimal.TEN)
+                        .isEqualTo((previousCommand.initialMoney - BigDecimal.TEN).asMoneyWithLocalCurrency())
                 }
         }
 
@@ -115,13 +117,15 @@ internal class PhoneCardTest {
         @Test
         internal fun `should send sms while valid command and state`() {
             whenever(validator.isValidCommandAndState(eq(command), any())).thenReturn(true)
-            whenever(smsCostCalculator.calculate()).thenReturn(BigDecimal.ONE)
+            whenever(smsCostCalculator.calculate())
+                .thenReturn(BigDecimal.ONE.asMoneyWithLocalCurrency())
 
             fixture.givenCommands(previousCommand)
                 .`when`(command)
                 .expectEventMatchingType(SmsSentEvent::class)
                 .expectState {
-                    Assertions.assertThat(it.moneyOnAccount).isEqualTo(previousCommand.initialMoney - BigDecimal.ONE)
+                    Assertions.assertThat(it.moneyOnAccount)
+                        .isEqualTo((previousCommand.initialMoney - BigDecimal.ONE).asMoneyWithLocalCurrency())
                 }
         }
 
@@ -154,7 +158,8 @@ internal class PhoneCardTest {
                 .`when`(command)
                 .expectEventMatchingType(CardTopUpEvent::class)
                 .expectState {
-                    Assertions.assertThat(it.moneyOnAccount).isEqualTo(previousCommand.initialMoney + command.amount)
+                    Assertions.assertThat(it.moneyOnAccount)
+                        .isEqualTo((previousCommand.initialMoney + command.amount).asMoneyWithLocalCurrency())
                 }
         }
 
