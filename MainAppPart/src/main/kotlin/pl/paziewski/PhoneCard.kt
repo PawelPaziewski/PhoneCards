@@ -46,7 +46,7 @@ class PhoneCard() {
                 phoneNumber,
                 command.receiverPhoneNumber,
                 command.callDuration,
-                costCalculator.calculate(phoneNumber, command.receiverPhoneNumber, command.callDuration),
+                costCalculator.calculate(command.callerPhoneNumber, command.receiverPhoneNumber, command.callDuration),
                 DateTimeAdapter.now()
             )
         )
@@ -66,7 +66,7 @@ class PhoneCard() {
             SmsSentEvent(
                 phoneNumber,
                 command.receiverPhoneNumber,
-                costCalculator.calculate(),
+                costCalculator.calculate(command.senderPhoneNumber, command.receiverPhoneNumber),
                 DateTimeAdapter.now()
             )
         )

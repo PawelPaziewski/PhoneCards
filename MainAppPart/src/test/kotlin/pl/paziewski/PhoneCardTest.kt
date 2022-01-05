@@ -117,7 +117,7 @@ internal class PhoneCardTest {
         @Test
         internal fun `should send sms while valid command and state`() {
             whenever(validator.isValidCommandAndState(eq(command), any())).thenReturn(true)
-            whenever(smsCostCalculator.calculate())
+            whenever(smsCostCalculator.calculate(any(), any()))
                 .thenReturn(BigDecimal.ONE.asMoneyWithLocalCurrency())
 
             fixture.givenCommands(previousCommand)

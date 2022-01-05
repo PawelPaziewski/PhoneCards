@@ -1,7 +1,6 @@
 package pl.paziewski
 
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.Duration
@@ -9,12 +8,7 @@ import java.time.Duration
 internal class SimpleCallCostCalculatorTest {
 
     private val anyDuration = Duration.ofMinutes(15)
-    private lateinit var calculator: CallCostCalculator
-
-    @BeforeEach
-    internal fun setUp() {
-        calculator = SimpleCallCostCalculator()
-    }
+    private val calculator = SimpleCallCostCalculator()
 
     @Test
     fun `should return zero cost while same provider and any call duration`() {
