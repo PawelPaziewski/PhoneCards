@@ -4,7 +4,6 @@ import org.axonframework.messaging.responsetypes.ResponseTypes
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import pl.paziewski.db.GetAllPhoneNumbersQuery
 
 interface PhoneNumberProvider {
     fun getNumber(): String

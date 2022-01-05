@@ -6,7 +6,6 @@ import org.axonframework.queryhandling.QueryGateway
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import pl.paziewski.db.GetAllPhoneNumbersQuery
 import java.util.concurrent.CompletableFuture
 
 internal class PhoneNumberProviderImplTest {

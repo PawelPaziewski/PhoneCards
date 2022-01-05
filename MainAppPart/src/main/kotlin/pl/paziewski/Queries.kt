@@ -1,4 +1,4 @@
-package pl.paziewski.db
+package pl.paziewski
 
 data class GetAccountBalanceQuery(val phoneNumber: String)
 
@@ -13,3 +13,5 @@ class GetAllPhoneNumbersQuery {
         return javaClass.hashCode()
     }
 }
+
+data class GetBillingQuery(val phoneNumber: String)

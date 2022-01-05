@@ -1,4 +1,4 @@
-package pl.paziewski.db
+package pl.paziewski.accountBalance
 
 import org.springframework.data.repository.CrudRepository
 

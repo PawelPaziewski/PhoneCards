@@ -1,4 +1,4 @@
-package pl.paziewski.db
+package pl.paziewski.accountBalance
 
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
