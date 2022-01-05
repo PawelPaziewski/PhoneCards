@@ -234,9 +234,9 @@ internal class MainControllerTest(
             whenever(
                 queryGateway.query(
                     GetAccountBalanceQuery(correctPhoneNumber),
-                    ResponseTypes.optionalInstanceOf(BigDecimal::class.java)
+                    ResponseTypes.optionalInstanceOf(Money::class.java)
                 )
-            ).thenReturn(CompletableFuture.completedFuture(Optional.of(BigDecimal.ZERO)))
+            ).thenReturn(CompletableFuture.completedFuture(Optional.of(BigDecimal.ZERO.asMoneyWithLocalCurrency())))
 
             mockMvc.perform(get(cardBalanceAddress).param("phoneNumber", correctPhoneNumber))
                 .andExpect(status().isOk)
