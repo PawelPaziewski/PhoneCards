@@ -1,8 +1,10 @@
 package pl.paziewski.billing
 
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.queryhandling.QueryHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import pl.paziewski.GetBillingQuery
 import pl.paziewski.PhoneCallMadeEvent
 import pl.paziewski.SmsSentEvent
 
@@ -27,5 +29,10 @@ class BillingProjection @Autowired constructor(private val repository: BillingRe
             event.callCost,
             event.receiverPhoneNumber,
             event.callDuration))
+    }
+
+    @QueryHandler
+    fun on(query: GetBillingQuery): List<BillingEntry> {
+        return repository.findAllByPhoneNumber(query.phoneNumber)
     }
 }

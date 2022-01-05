@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import pl.paziewski.billing.BillingEntry
 import java.math.BigDecimal
 import java.time.Duration
 import java.util.*
@@ -58,4 +59,9 @@ class MainController @Autowired constructor(
     ) {
         commandGateway.send<Any>(SendSmsCommand(sender, receiver))
     }
+
+    @GetMapping("/billing")
+    fun getBilling(@RequestParam(name = "phoneNumber", required = true) phoneNumber: String): List<BillingEntry> =
+        queryGateway.query(GetBillingQuery(phoneNumber),
+            ResponseTypes.multipleInstancesOf(BillingEntry::class.java)).get()
 }

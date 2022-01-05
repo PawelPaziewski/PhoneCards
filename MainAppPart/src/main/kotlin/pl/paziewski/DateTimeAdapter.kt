@@ -3,7 +3,7 @@ package pl.paziewski
 import java.time.LocalDateTime
 
 //The adapter will be developed according to needed functionality
-class DateTimeAdapter(private val date: LocalDateTime) {
+class DateTimeAdapter(val date: LocalDateTime) {
 
     companion object {
         fun now(): DateTimeAdapter {

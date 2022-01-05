@@ -13,3 +13,5 @@ class GetAllPhoneNumbersQuery {
         return javaClass.hashCode()
     }
 }
+
+data class GetBillingQuery(val phoneNumber: String)
