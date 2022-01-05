@@ -2,6 +2,7 @@ package pl.paziewski
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 @SpringBootApplication
@@ -9,5 +10,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 class PhoneCardsApplication
 
 fun main(args: Array<String>) {
-    runApplication<PhoneCardsApplication>(*args)
+    val ctx = runApplication<PhoneCardsApplication>(*args)
+    ctx.getBean(MongoTemplate::class.java).db.drop()
 }
