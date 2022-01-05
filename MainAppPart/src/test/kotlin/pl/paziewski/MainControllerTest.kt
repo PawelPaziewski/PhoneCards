@@ -169,7 +169,7 @@ internal class MainControllerTest(
         }
 
         @Test
-        internal fun `should has status BadRequest while put to send sms without sender phone numberr`() {
+        internal fun `should has status BadRequest while put to send sms without sender phone number`() {
             mockMvc.perform(
                 put(sendSmsAddress)
                     .param("receiverPhoneNumber", correctSecondPhoneNumber)
@@ -203,7 +203,7 @@ internal class MainControllerTest(
             mockMvc.perform(
                 put(topUpCardAddress)
                     .param("phoneNumber", correctPhoneNumber)
-                    .param("amount", "cztery")
+                    .param("amount", "four")
             ).andExpect(status().isBadRequest)
         }
 
@@ -220,7 +220,7 @@ internal class MainControllerTest(
             mockMvc.perform(
                 put(topUpCardAddress)
                     .param("phoneNumber", correctPhoneNumber)
-                    .param("amount", "cztery")
+                    .param("amount", "four")
             ).andExpect(status().isBadRequest)
         }
     }

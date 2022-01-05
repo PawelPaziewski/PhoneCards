@@ -7,7 +7,7 @@ class DateTimeAdapter(private val date: LocalDateTime) {
 
     companion object {
         fun now(): DateTimeAdapter {
-            return DateTimeAdapter(LocalDateTime.now());
+            return DateTimeAdapter(LocalDateTime.now())
         }
     }
 
