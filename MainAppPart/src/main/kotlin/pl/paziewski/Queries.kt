@@ -1,4 +1,4 @@
-package pl.paziewski.db
+package pl.paziewski
 
 data class GetAccountBalanceQuery(val phoneNumber: String)
 
