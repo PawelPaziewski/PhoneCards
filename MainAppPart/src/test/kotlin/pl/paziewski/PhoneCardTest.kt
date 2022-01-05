@@ -79,7 +79,7 @@ internal class PhoneCardTest {
         @Test
         internal fun `should produce event while valid phone call made`() {
             whenever(validator.isValidCommandAndState(eq(command), any())).thenReturn(true)
-            whenever(callCostCalculator.calculate(command.callDuration))
+            whenever(callCostCalculator.calculate(any(), any(), any()))
                 .thenReturn(BigDecimal.TEN.asMoneyWithLocalCurrency())
 
             fixture

@@ -46,7 +46,7 @@ class PhoneCard() {
                 phoneNumber,
                 command.receiverPhoneNumber,
                 command.callDuration,
-                costCalculator.calculate(command.callDuration),
+                costCalculator.calculate(phoneNumber, command.receiverPhoneNumber, command.callDuration),
                 DateTimeAdapter.now()
             )
         )
